@@ -9,13 +9,13 @@ Pipeline de Inteligência Artificial autônoma construída com **CrewAI** para p
 O projeto utiliza um pipeline sequencial composto por três agentes especializados:
 
 1. **Recrutador Especialista e Pesquisador de Vagas (`job_hunter_agent`)**:
-    - Lê o seu currículo oficial.
-    - Utiliza a ferramenta de busca web (`DuckDuckGo`) para encontrar vagas recentes e aderentes ao seu perfil (Java, Spring Boot, GCP, IA).
+   - Lê o seu currículo oficial.
+   - Utiliza a ferramenta de busca web (`DuckDuckGo`) para encontrar vagas recentes e aderentes ao seu perfil (Java, Spring Boot, GCP, IA).
 2. **Consultor de Carreira Sênior (`career_advisor_agent`)**:
-    - Analisa as oportunidades encontradas.
-    - Seleciona as **5 melhores vagas** com maior fit técnico e cultural, detalhando requisitos e justificativas.
+   - Analisa as oportunidades encontradas.
+   - Seleciona as **5 melhores vagas** com maior fit técnico e cultural, detalhando requisitos e justificativas.
 3. **Editor Técnico e Especialista em Documentação (`report_editor_agent`)**:
-    - Recebe o relatório consolidado, valida a formatação em Markdown e aciona a ferramenta de salvamento automático para gravar o resultado de forma única (evitando sobrescrita).
+   - Recebe o relatório consolidado, valida a formatação em Markdown e aciona a ferramenta de salvamento automático para gravar o resultado de forma única (evitando sobrescrita).
 
 ---
 
@@ -27,3 +27,46 @@ job-hunter-crew/
 ├── main.py             # Script principal contendo os agentes, tasks e pipeline do CrewAI
 ├── output/             # Diretório onde os relatórios em Markdown são salvos com timestamp
 └── README.md           # Documentação do projeto
+```
+
+---
+
+## ⚙️ Pré-requisitos
+
+- **Python 3.10+** (Ambiente WSL / Ubuntu recomendado)
+- **Ollama** rodando localmente (ex: via Docker) com o modelo configurado (`qwen3-coder:30b`).
+
+---
+
+## 🚀 Instalação e Configuração
+
+Abra o seu terminal no WSL/Ubuntu e siga os passos abaixo:
+
+### 1. Navegue até o diretório do projeto
+```bash
+cd ~/devtools/repos/job-hunter-crew
+```
+
+### 2. Criar e ativar o ambiente virtual Python
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Instalar as dependências do projeto
+```bash
+pip install --upgrade pip
+pip install crewai crewai-tools duckduckgo-search
+```
+
+---
+
+## ▶️ Como Executar o Projeto
+
+Certifique-se de que o seu container do Ollama está rodando e acessível na porta `11434`. Com o ambiente virtual ativado (`source venv/bin/activate`), basta executar o script principal:
+
+```bash
+python main.py
+```
+
+O pipeline será iniciado, os agentes farão as buscas e análises de mercado, e o relatório final em Markdown será exibido no console e salvo automaticamente no diretório `output/` com um timestamp exclusivo (ex: `job_report_20261111_183000.md`).
