@@ -33,20 +33,7 @@ def web_search_tool(query: str) -> str:
             results.append(f"Título: {r.get('title')}\nLink: {r.get('href')}\nResumo: {r.get('body')}\n")
     return "\n---\n".join(results) if results else "Nenhum resultado encontrado."
 
-# Ferramenta para salvar o relatório em Markdown com timestamp
-@tool("Salvar Relatório em Markdown")
-def save_markdown_report(content: str) -> str:
-    """Recebe o conteúdo consolidado em Markdown, gera um nome baseado em timestamp e salva no diretório de output."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"job_report_{timestamp}.md"
-    filepath = os.path.join(OUTPUT_DIR, filename)
-
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(content)
-
-    return f"Relatório salvo com sucesso no caminho: {filepath}"
-
-# 4. Definição dos Agentes (Incluindo o editor responsável por salvar)
+# 4. Definição dos Agentes
 job_hunter_agent = Agent(
     role="Recrutador Especialista e Pesquisador de Vagas",
     goal="Encontrar vagas de emprego abertas na internet totalmente aderentes ao perfil técnico e sênior do candidato.",
@@ -72,17 +59,16 @@ career_advisor_agent = Agent(
 
 report_editor_agent = Agent(
     role="Editor Técnico e Especialista em Documentação",
-    goal="Revisar e persistir o relatório final em formato Markdown utilizando a ferramenta de salvamento.",
+    goal="Revisar, polir e estruturar o relatório final em formato Markdown limpo e profissional.",
     backstory=(
-        "Você é um revisor técnico responsável por garantir que o relatório final esteja bem formatado e salvo "
-        "corretamente no diretório de saída com nome único."
+        "Você é um revisor técnico rigoroso responsável por garantir que o relatório final esteja impecável, "
+        "com excelente formatação em Markdown e pronto para publicação."
     ),
-    tools=[save_markdown_report],
     verbose=True,
     llm=ollama_llm,
 )
 
-# 5. Definição das Tarefas (Incluindo a task de salvamento)
+# 5. Definição das Tarefas
 search_task = Task(
     description=(
         f"Com base no resumo profissional a seguir:\n\n{curriculo_conteudo}\n\n"
@@ -112,13 +98,13 @@ report_task = Task(
     agent=career_advisor_agent,
 )
 
-save_task = Task(
+edit_task = Task(
     description=(
-        "Receba o relatório consolidado, revise sua estrutura em Markdown e utilize a ferramenta "
-        "'Salvar Relatório em Markdown' para persistir o documento no diretório de saída."
+        "Receba o relatório consolidado do consultor de carreira, revise a formatação em Markdown para garantir "
+        "uma apresentação limpa, organizada e profissional do conteúdo."
     ),
     expected_output=(
-        "A confirmação de que o arquivo Markdown foi gerado e salvo com sucesso."
+        "O relatório final revisado e formatado perfeitamente em Markdown."
     ),
     agent=report_editor_agent,
 )
@@ -126,15 +112,24 @@ save_task = Task(
 # 6. Montagem e Execução da Crew
 job_pipeline = Crew(
     agents=[job_hunter_agent, career_advisor_agent, report_editor_agent],
-    tasks=[search_task, report_task, save_task],
+    tasks=[search_task, report_task, edit_task],
     process=Process.sequential,
     verbose=True
 )
 
 if __name__ == "__main__":
-    print("## Iniciando Pipeline Job Hunter Nativo com Salvamento Automático ##")
+    print("## Iniciando Pipeline Job Hunter Nativo com Salvamento Automático via Python ##")
     resultado = job_pipeline.kickoff()
+
+    # Grava o resultado final em arquivo Markdown com timestamp único
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"job_report_{timestamp}.md"
+    filepath = os.path.join(OUTPUT_DIR, filename)
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(str(resultado))
+
     print("\n\n##################################################")
-    print("## RELATÓRIO FINAL E ARQUIVO SALVO COM SUCESSO ##")
+    print(f"## RELATÓRIO SALVO COM SUCESSO: {filepath} ##")
     print("##################################################\n")
     print(resultado)
