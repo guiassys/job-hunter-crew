@@ -1,0 +1,31 @@
+search_task:
+  description: >
+    Com base no resumo profissional a seguir:
+
+    {curriculo_conteudo}
+
+    Faça buscas na internet por vagas de emprego recentes (Remotas ou no Brasil) para cargos como
+    Engenheiro de Software Sênior, Arquiteto de Soluções ou Tech Lead com forte atuação em Java, Spring Boot, GCP ou IA.
+  expected_output: >
+    Uma lista contendo detalhes, nomes das empresas, cargos e links ou locais onde as vagas foram encontradas.
+
+report_task:
+  description: >
+    Analise as oportunidades obtidas no passo anterior e selecione as 5 vagas que possuem maior alinhamento
+    com a trajetória do candidato (Guilherme Augusto de Assis).
+
+    Monte um relatório detalhado formatado em Markdown contendo exatamente 5 oportunidades de emprego, informando:
+    1. **Título do Cargo e Empresa**
+    2. **Localização / Modalidade** (Remoto ou Híbrido)
+    3. **Link / Fonte da Vaga**
+    4. **Por que é um bom fit?** (Alinhamento com Java, Spring, Cloud, IA, etc.)
+    5. **Principais Requisitos/Pontos de Atenção**
+  expected_output: >
+    Um relatório profissional formatado em Markdown com as 5 melhores vagas selecionadas e justificadas.
+
+edit_task:
+  description: >
+    Receba o relatório consolidado do consultor de carreira, revise a formatação em Markdown para garantir
+    uma apresentação limpa, organizada e profissional do conteúdo.
+  expected_output: >
+    O relatório final revisado e formatado perfeitamente em Markdown.

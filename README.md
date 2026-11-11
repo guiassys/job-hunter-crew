@@ -1,12 +1,12 @@
 # 🤖 Job Hunter Crew (CrewAI + Ollama Local)
 
-Pipeline de Inteligência Artificial autônoma construída com **CrewAI** para pesquisar, filtrar, analisar e documentar vagas de emprego de tecnologia alinhadas ao seu perfil profissional. O sistema roda 100% local utilizando modelos executados via **Ollama** e ferramentas gratuitas de busca web.
+Pipeline de Inteligência Artificial autônoma construída com **CrewAI** para pesquisar, filtrar, analisar e documentar vagas de emprego de tecnologia alinhadas ao seu perfil profissional. O sistema roda 100% local utilizando modelos executados via **Ollama** e ferramentas gratuitas de busca web, seguindo uma arquitetura modular baseada em boas práticas.
 
 ---
 
 ## 🏗️ Como o Projeto Funciona (Arquitetura)
 
-O projeto utiliza um pipeline sequencial composto por três agentes especializados:
+O projeto utiliza um pipeline sequencial composto por três agentes especializados, com prompts e tarefas desacoplados em arquivos de configuração YAML:
 
 1. **Recrutador Especialista e Pesquisador de Vagas (`job_hunter_agent`)**:
    - Lê o seu currículo oficial.
@@ -23,10 +23,18 @@ O projeto utiliza um pipeline sequencial composto por três agentes especializad
 
 ```text
 job-hunter-crew/
-│
-├── main.py             # Script principal contendo os agentes, tasks e pipeline do CrewAI
-├── output/             # Diretório onde os relatórios em Markdown são salvos com timestamp
-└── README.md           # Documentação do projeto
+├── config/
+│   ├── agents.yaml       # Configuração de papéis, goals e backstories dos agentes
+│   └── tasks.yaml        # Descrições e expected_outputs das tarefas
+├── output/               # Diretório onde os relatórios em Markdown são salvos com timestamp
+├── src/
+│   ├── __init__.py
+│   ├── crew.py           # Classe orquestradora da Crew utilizando @CrewBase
+│   └── tools.py          # Ferramentas customizadas (DuckDuckGo search)
+├── .env
+├── README.md
+├── main.py               # Script principal e ponto de entrada leve
+└── requirements.txt      # Dependências do projeto
 ```
 
 ---
@@ -42,21 +50,21 @@ job-hunter-crew/
 
 Abra o seu terminal no WSL/Ubuntu e siga os passos abaixo:
 
-### 1. Navegue até o diretório do projeto
+1. **Navegue até o diretório do projeto**
 ```bash
 cd ~/devtools/repos/job-hunter-crew
 ```
 
-### 2. Criar e ativar o ambiente virtual Python
+2. **Criar e ativar o ambiente virtual Python**
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Instalar as dependências do projeto
+3. **Instalar as dependências do projeto**
 ```bash
 pip install --upgrade pip
-pip install crewai crewai-tools duckduckgo-search
+pip install -r requirements.txt
 ```
 
 ---
